@@ -17,7 +17,7 @@
 
 ##How to enable spi bus on raspeberry pi3 & Execute program
 
-(raspberrypi) $ sudo raspi-consig
+(raspberrypi) $ sudo raspi-config
 
 >enter 5.interfacing option
 
