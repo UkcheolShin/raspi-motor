@@ -152,7 +152,7 @@ int rpi_gpio_read(unsigned int pin_num)
 int rpi_spi_setup(int channel, int mode, int bits_per_word, int speed, int delay)
 {
 	char  fName[128];
-	int   spi_channel = channel & 0x1;
+	int   spi_channel = channel & 0x3;
 	int   spi_mode    = mode & 0x3;  
 	int   spi_bpw     = bits_per_word; 
 	int   spi_delay   = delay ; 
@@ -226,7 +226,7 @@ int rpi_spi_data_rw(int channel, unsigned char *data, int len)
 {
     struct spi_ioc_transfer spi = {0,}; 
     
-    channel             &= 1 ; 
+    channel             &= 0x3 ; 
     spi.tx_buf          = (unsigned long)data ; 
     spi.rx_buf          = (unsigned long)data ;      
     spi.len             = len ;  
