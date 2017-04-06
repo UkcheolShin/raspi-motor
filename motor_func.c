@@ -220,12 +220,12 @@ int pos_control(int ref_pos, int wheel_direction, int move_direction)
     cur_encoder = encoder_read(wheel_direction);
 
     //check_over_under_flow 
-    //+방향으로 진행시 엔코더의 값이 0xfff --> 0x000으로 엔코더 초기화
-    //-방향으로 진행시 엔코더의 값이 0x000 --> 0xfff으로 엔코더 초기화의 경우 연산.
-    //ex. +방향 진행시 prev_enc = 0xff0 --> cur_enc = 0x001 일경우 (0x001 + 0xfff) - 0xff0 = 0x011 만큼의 변화가 일어남.
-    if( (mv_direction == FORWARD) & (prev_encoder > cur_encoder + ENCODER_ERR) )              
+    //-방향으로 진행시 엔코더의 값이 0xfff --> 0x000으로 엔코더 초기화
+    //+방향으로 진행시 엔코더의 값이 0x000 --> 0xfff으로 엔코더 초기화의 경우 연산.
+    //ex. -방향 진행시 prev_enc = 0xff0 --> cur_enc = 0x001 일경우 (0x001 + 0xfff) - 0xff0 = 0x011 만큼의 변화가 일어남.
+    if( (mv_direction == BACKWARD) & (prev_encoder > cur_encoder + ENCODER_ERR) )              
         cur_encoder += UNIT_ENCODER_RESOLUTION;
-    else if( (mv_direction == BACKWARD) & (cur_encoder > prev_encoder + ENCODER_ERR) )        
+    else if( (mv_direction == FORWARD) & (cur_encoder > prev_encoder + ENCODER_ERR) )        
         prev_encoder += UNIT_ENCODER_RESOLUTION;
 
     //unsigned value로 err_encoder 사용.
@@ -233,6 +233,8 @@ int pos_control(int ref_pos, int wheel_direction, int move_direction)
     if(cur_encoder>prev_encoder)             err_encoder = cur_encoder - prev_encoder;
     else if(prev_encoder>cur_encoder)        err_encoder = prev_encoder - cur_encoder;
 
+    //prev_encoder값 갱신    
+    if(cur_encoder > UNIT_ENCODER_RESOLUTION) cur_encoder -= UNIT_ENCODER_RESOLUTION;
     prev_encoder = cur_encoder;
 
     //현재 이동 거리(degree) += 엔코더 에러 * 360 / encoder resoultion / gear ratio
@@ -303,19 +305,21 @@ int vel_control(int ref_vel, int wheel_direction, int move_direction)
     cur_encoder = encoder_read(wheel_direction);
 
     //check_over_under_flow 
-    //+방향으로 진행시 엔코더의 값이 0xfff --> 0x000으로 엔코더 초기화
-    //-방향으로 진행시 엔코더의 값이 0x000 --> 0xfff으로 엔코더 초기화의 경우 연산.
-    //ex. +방향 진행시 prev_enc = 0xff0 --> cur_enc = 0x001 일경우 (0x001 + 0xfff) - 0xff0 = 0x011 만큼의 변화가 일어남.
-    if( (mv_direction == FORWARD) & (prev_encoder > cur_encoder + ENCODER_ERR) )              
+    //-방향으로 진행시 엔코더의 값이 0xfff --> 0x000으로 엔코더 초기화
+    //+방향으로 진행시 엔코더의 값이 0x000 --> 0xfff으로 엔코더 초기화의 경우 연산.
+    //ex. -방향 진행시 prev_enc = 0xff0 --> cur_enc = 0x001 일경우 (0x001 + 0xfff) - 0xff0 = 0x011 만큼의 변화가 일어남.
+    if( (mv_direction == BACKWARD) & (prev_encoder > cur_encoder + ENCODER_ERR) )              
         cur_encoder += UNIT_ENCODER_RESOLUTION;
-    else if( (mv_direction == BACKWARD) & (cur_encoder > prev_encoder + ENCODER_ERR) )        
+    else if( (mv_direction == FORWARD) & (cur_encoder > prev_encoder + ENCODER_ERR) )        
         prev_encoder += UNIT_ENCODER_RESOLUTION;
 
     //unsigned value로 err_encoder 사용.
     //err_encoder = abs(cur_encoder - prev_encoder);    
     if(cur_encoder>prev_encoder)             err_encoder = cur_encoder - prev_encoder;
     else if(prev_encoder>cur_encoder)        err_encoder = prev_encoder - cur_encoder;
-
+    
+    //prev_encoder값 갱신        
+    if(cur_encoder > UNIT_ENCODER_RESOLUTION) cur_encoder -= UNIT_ENCODER_RESOLUTION;    
     prev_encoder = cur_encoder;
 
     //순간속도 = (enc * 360 / 4095(Resoultion) / 6.3(Gear ratio)) / 0.001(dT)
@@ -373,9 +377,9 @@ void pos_speed_printf(int wheel_direction, int move_direction)
     cur_encoder = encoder_read(wheel_direction);
 
     //check_over_under_flow
-    if( (move_direction == FORWARD) & (prev_encoder > cur_encoder + ENCODER_ERR) )
+    if( (move_direction == BACKWARD) & (prev_encoder > cur_encoder + ENCODER_ERR) )
         cur_encoder += UNIT_ENCODER_RESOLUTION;
-    else if( (move_direction == BACKWARD) & (cur_encoder > prev_encoder + ENCODER_ERR) )
+    else if( (move_direction == FORWARD) & (cur_encoder > prev_encoder + ENCODER_ERR) )
         prev_encoder += UNIT_ENCODER_RESOLUTION;
 
     //err_encoder 계산
@@ -383,11 +387,14 @@ void pos_speed_printf(int wheel_direction, int move_direction)
         err_encoder = cur_encoder - prev_encoder;
     else if(prev_encoder>cur_encoder)
         err_encoder = prev_encoder - cur_encoder;
+    
+    //prev_encoder값 갱신        
+    if(cur_encoder > UNIT_ENCODER_RESOLUTION) cur_encoder -= UNIT_ENCODER_RESOLUTION;    
     prev_encoder = cur_encoder;
 
     //이동거리, 순간속도, 평균 속도 계산
-    pos += err_encoder*360/UNIT_ENCODER_RESOLUTION/GEAR_RATIO;
-    tmp_speed = (pos - prev_pos)/ dT;
+    pos += (float)err_encoder*360/UNIT_ENCODER_RESOLUTION/GEAR_RATIO;
+    tmp_speed = (float)(pos - prev_pos)/ dT;
     T += dT;
     avg_speed = pos / T;
     prev_pos = pos; 
