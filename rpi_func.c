@@ -31,14 +31,14 @@ int rpi_gpio_setup(void)
     int mem_fd; 
     int ret = 0;
 
-	//BCM2835 메모리 디바이스 파일 오픈
- 	if ((mem_fd = open ("/dev/mem", O_RDWR | O_SYNC)) < 0){
-		printf("mem open error\n");
+	//BCM2835 메모리 디바이스 파일 오픈		
+	if ((mem_fd = open ("/dev/mem", O_RDWR | O_SYNC | O_CLOEXEC)) < 0){
+		printf("mem open error\n");						   
 		return -1;
 	}
 
     //GPIO_BASE부터 BLOCK_SIZE만큼의 동적 메모리 할당하고 시작 주소 반환.
-    if((iom_gpio = (int *)mmap(0, BLOCK_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, mem_fd, GPIO_BASE)) == NULL){
+    if((iom_gpio = (unsigned int *)mmap(0, BLOCK_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, mem_fd, GPIO_BASE)) == NULL){
 		printf("mmap error\n");
 		return -1;
     }
