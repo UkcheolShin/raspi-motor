@@ -28,7 +28,7 @@
 #define PWM_BASE        	(BCM2708_PERI_BASE + 0x20C000) /* PWM controller */
 
 //메모리 매핑을 위한 전역 변수
-volatile static int *iom_gpio;
+static volatile unsigned int *iom_gpio;
 #define BLOCK_SIZE      	(4*1024)
 
 /* 
