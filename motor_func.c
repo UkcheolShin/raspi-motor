@@ -33,7 +33,7 @@ int motor_hw_init(void)
     /* gpio 핀을 출력으로 설정하고 0으로 출력 초기화*/
     for(i=0; i<sizeof(init_hw_out)/sizeof(int); i++){
         if((ret = rpi_gpio_direction(init_hw_out[i],OUTPUT)) < 0)   break;
-        if((ret = rpi_gpio_write(init_hw_out[i],OFF)) < 0)          break;
+        if((ret = rpi_gpio_write(init_hw_out[i],ON)) < 0)          break;
     }
     return ret;
 }
