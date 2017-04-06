@@ -44,8 +44,8 @@ volatile static int *iom_gpio;
 #define INP_GPIO(g) 		*(iom_gpio+((g)/10)) 	&= ~(7<<(((g)%10)*3))
 #define OUT_GPIO(g) 		*(iom_gpio+((g)/10)) 	|=  (1<<(((g)%10)*3))
 #define SET_GPIO_ALT(g,a) 	*(iom_gpio+(((g)/10))) 	|= 	(((a)<=3?(a)+4:(a)==4?3:2)<<(((g)%10)*3))
-#define GPIO_SET(g) 		*(iom_gpio+7+((g)/32)) 	|= 	(1<<(((g)%32))) 
-#define GPIO_CLEAR(g) 		*(iom_gpio+10+((g)/32)) |= 	(1<<(((g)%32)))
+#define GPIO_SET(g) 		*(iom_gpio+7+((g)/32)) 	= 	(1<<(((g)%32))) 
+#define GPIO_CLEAR(g) 		*(iom_gpio+10+((g)/32)) = 	(1<<(((g)%32)))
 #define GPIO_READ(g) 		*(iom_gpio+13+((g)/32)) | 	(1<<(((g)%32)))
 
 #define OUTPUT 1
