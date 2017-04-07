@@ -44,8 +44,8 @@
 #define DAC_CMD_NO_OP			0xf 	// No Operation
 
 // DAC Address codes
-#define	DAC_ADDR_LEFT	0x0 // DAC A
-#define DAC_ADDR_RIGHT	0x1 // DAC B
+#define DAC_ADDR_RIGHT 0x0 // DAC A
+#define	DAC_ADDR_LEFT	0x1 // DAC B
 #define DAC_ADDR_ALL	0xf // ALL DAC
 
 // DAC Data Range
@@ -56,8 +56,8 @@
 #define DAC_MODE    0
 #define BREAK_MODE	1
 
-#define RIGHT_WHEEL 1
-#define LEFT_WHEEL 	0
+#define RIGHT_WHEEL 0
+#define LEFT_WHEEL 	1
 
 #define FORWARD 	1
 #define BACKWARD 	0
