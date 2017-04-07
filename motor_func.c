@@ -238,7 +238,7 @@ int pos_control(int ref_pos, int wheel_direction, int move_direction)
     prev_encoder = cur_encoder;
 
     //현재 이동 거리(degree) += 엔코더 에러 * 360 / encoder resoultion / gear ratio
-    feedback_pos += (float)(err_encoder * 360 / UNIT_ENCODER_RESOLUTION / GEAR_RATIO); 
+    feedback_pos += (float)err_encoder * 360 / UNIT_ENCODER_RESOLUTION / GEAR_RATIO; 
 
     //오차 계산
     err_pos = ref_pos - feedback_pos;
@@ -323,7 +323,7 @@ int vel_control(int ref_vel, int wheel_direction, int move_direction)
     prev_encoder = cur_encoder;
 
     //순간속도 = (enc * 360 / 4095(Resoultion) / 6.3(Gear ratio)) / 0.001(dT)
-    feedback_vel = (float)(err_encoder * 360 / UNIT_ENCODER_RESOLUTION / GEAR_RATIO / dT); 
+    feedback_vel = (float)err_encoder * 360 / UNIT_ENCODER_RESOLUTION / GEAR_RATIO / dT; 
 
     //속도 오차 계산
     err_vel = ref_vel - feedback_vel;
