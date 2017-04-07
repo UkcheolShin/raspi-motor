@@ -56,8 +56,8 @@
 #define DAC_MODE    0
 #define BREAK_MODE	1
 
-#define LEFT_WHEEL 	0
 #define RIGHT_WHEEL 1
+#define LEFT_WHEEL 	0
 
 #define FORWARD 	1
 #define BACKWARD 	0
